@@ -1,24 +1,43 @@
+
 export type CalculatorType = 
   | 'basic'
   | 'scientific'
+  | 'equation'
+  | 'matrix'
+  | 'complex'
   | 'bmi'
+  | 'calorie'
+  | 'macro'
+  | 'bodyfat'
   | 'loan'
   | 'compound'
   | 'currency'
-  | 'tip'
+  | 'retirement'
+  | 'roi'
+  | 'stats'
+  | 'regression'
+  | 'probability'
+  | 'ohms'
+  | 'resistor'
+  | 'beam'
+  | 'fluid'
   | 'unit'
-  | 'calorie'
+  | 'timezone'
+  | 'storage'
+  | 'base'
+  | 'tip'
   | 'age'
   | 'discount'
   | 'fuel'
-  | 'gpa';
+  | 'gpa'
+  | 'ai-solver';
 
 export interface CalculatorDef {
   id: CalculatorType;
   title: string;
   description: string;
   icon: React.ReactNode;
-  category: 'finance' | 'health' | 'math' | 'everyday';
+  category: 'finance' | 'health' | 'math' | 'science' | 'engineering' | 'coding' | 'everyday' | 'ai';
 }
 
 export interface AdProps {

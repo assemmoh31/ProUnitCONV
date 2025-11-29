@@ -1,9 +1,10 @@
+
 import React, { useState, useEffect } from 'react';
-import { PieChart, Pie, Cell, AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
+import { PieChart, Pie, Cell, AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar, Legend } from 'recharts';
 import { GeminiAssistant } from '../GeminiAssistant.tsx';
 
 // --- Shared Styles ---
-const inputClass = "w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all";
+const inputClass = "w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all bg-white text-gray-900";
 const labelClass = "block text-sm font-medium text-gray-700 mb-1";
 
 // --- LOAN CALCULATOR ---
@@ -162,7 +163,7 @@ export const CurrencyConverter: React.FC = () => {
       </div>
       <div className="flex gap-2 items-end">
         <div className="flex-1">
-           <div className="p-2 bg-gray-50 border border-gray-200 rounded-md text-gray-500">{result.toFixed(2)}</div>
+           <div className="p-2 bg-gray-50 border border-gray-200 rounded-md text-gray-500 bg-white">{result.toFixed(2)}</div>
         </div>
         <div className="w-24">
            <label className={labelClass}>To</label>
@@ -245,6 +246,86 @@ export const DiscountCalculator: React.FC = () => {
         <p className="text-gray-500 mb-1">Final Price</p>
         <p className="text-4xl font-bold text-green-600">${final.toFixed(2)}</p>
         <p className="text-sm text-green-700 mt-2">Saved: ${saved.toFixed(2)}</p>
+      </div>
+    </div>
+  );
+};
+
+// --- RETIREMENT CALCULATOR ---
+export const RetirementCalculator: React.FC = () => {
+  const [currentAge, setCurrentAge] = useState(30);
+  const [retireAge, setRetireAge] = useState(65);
+  const [savings, setSavings] = useState(50000);
+  const [monthly, setMonthly] = useState(1000);
+  
+  const years = retireAge - currentAge;
+  const rate = 0.07; // 7% avg return
+  
+  // Future Value of Lump Sum: PV * (1+r)^n
+  const fvLump = savings * Math.pow(1 + rate, years);
+  
+  // Future Value of Annuity: PMT * (((1+r)^n - 1) / r)
+  const fvMonthly = (monthly * 12) * ((Math.pow(1 + rate, years) - 1) / rate);
+  
+  const total = fvLump + fvMonthly;
+
+  return (
+    <div className="space-y-6">
+       <div className="grid grid-cols-2 gap-4">
+          <div><label className={labelClass}>Current Age</label><input type="number" value={currentAge} onChange={e => setCurrentAge(Number(e.target.value))} className={inputClass} /></div>
+          <div><label className={labelClass}>Retire Age</label><input type="number" value={retireAge} onChange={e => setRetireAge(Number(e.target.value))} className={inputClass} /></div>
+          <div><label className={labelClass}>Current Savings</label><input type="number" value={savings} onChange={e => setSavings(Number(e.target.value))} className={inputClass} /></div>
+          <div><label className={labelClass}>Monthly Savings</label><input type="number" value={monthly} onChange={e => setMonthly(Number(e.target.value))} className={inputClass} /></div>
+       </div>
+       <div className="bg-gradient-to-r from-emerald-500 to-teal-600 p-6 rounded-xl text-white text-center shadow-lg">
+          <p className="opacity-90 mb-1">Projected Wealth at {retireAge}</p>
+          <p className="text-4xl font-bold">${Math.round(total).toLocaleString()}</p>
+          <p className="text-xs opacity-75 mt-2">Assuming 7% annual return</p>
+       </div>
+       <GeminiAssistant context={`Retirement: Age ${currentAge}, Retire at ${retireAge}, Current $${savings}, Monthly $${monthly}.`} result={`Projected: $${Math.round(total).toLocaleString()}`} />
+    </div>
+  );
+};
+
+// --- ROI CALCULATOR ---
+export const ROICalculator: React.FC = () => {
+  const [invested, setInvested] = useState(10000);
+  const [returned, setReturned] = useState(15000);
+  
+  const profit = returned - invested;
+  const roi = (profit / invested) * 100;
+  
+  const data = [
+      { name: 'Invested', amount: invested },
+      { name: 'Returned', amount: returned }
+  ];
+
+  return (
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+      <div className="space-y-4">
+        <div><label className={labelClass}>Amount Invested</label><input type="number" value={invested} onChange={e => setInvested(Number(e.target.value))} className={inputClass} /></div>
+        <div><label className={labelClass}>Amount Returned</label><input type="number" value={returned} onChange={e => setReturned(Number(e.target.value))} className={inputClass} /></div>
+        
+        <div className="bg-blue-50 p-4 rounded-lg mt-4 text-center">
+            <p className="text-blue-500 font-bold uppercase text-xs">ROI</p>
+            <p className={`text-3xl font-bold ${roi >= 0 ? 'text-green-600' : 'text-red-600'}`}>{roi.toFixed(2)}%</p>
+            <p className="text-sm text-gray-500 mt-1">Profit: ${profit.toFixed(2)}</p>
+        </div>
+      </div>
+      <div className="h-64">
+         <ResponsiveContainer width="100%" height="100%">
+            <BarChart data={data}>
+              <CartesianGrid strokeDasharray="3 3" vertical={false} />
+              <XAxis dataKey="name" />
+              <YAxis />
+              <Tooltip formatter={(val: number) => `$${val}`} />
+              <Bar dataKey="amount" fill="#3b82f6" barSize={60} radius={[4, 4, 0, 0]}>
+                 {data.map((entry, index) => (
+                    <Cell key={`cell-${index}`} fill={index === 0 ? '#94a3b8' : (profit >= 0 ? '#22c55e' : '#ef4444')} />
+                 ))}
+              </Bar>
+            </BarChart>
+         </ResponsiveContainer>
       </div>
     </div>
   );

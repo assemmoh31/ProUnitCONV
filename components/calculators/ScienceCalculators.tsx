@@ -1,6 +1,7 @@
+
 import React, { useState } from 'react';
 
-const inputClass = "w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-cyan-500 focus:border-transparent outline-none transition-all";
+const inputClass = "w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-cyan-500 focus:border-transparent outline-none transition-all bg-white text-gray-900";
 const labelClass = "block text-sm font-medium text-gray-700 mb-1";
 const btnClass = "p-3 rounded-lg font-semibold transition-colors shadow-sm active:scale-95";
 
@@ -122,7 +123,7 @@ export const UnitConverter: React.FC = () => {
       </div>
       <div className="text-center text-gray-400">↓</div>
       <div className="flex items-center gap-2">
-        <div className="w-full p-2 bg-gray-50 border rounded-md text-gray-700">{convert().toFixed(4)}</div>
+        <div className="w-full p-2 bg-gray-50 border rounded-md text-gray-700 bg-white">{convert().toFixed(4)}</div>
         <select value={toUnit} onChange={e => setToUnit(e.target.value)} className={`${inputClass} w-24`}>
             {Object.keys(units[type]).map(u => <option key={u} value={u}>{u}</option>)}
         </select>

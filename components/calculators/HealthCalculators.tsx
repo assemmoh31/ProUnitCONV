@@ -1,7 +1,9 @@
+
 import React, { useState } from 'react';
 import { GeminiAssistant } from '../GeminiAssistant.tsx';
+import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer } from 'recharts';
 
-const inputClass = "w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-pink-500 focus:border-transparent outline-none transition-all";
+const inputClass = "w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-pink-500 focus:border-transparent outline-none transition-all bg-white text-gray-900";
 const labelClass = "block text-sm font-medium text-gray-700 mb-1";
 
 // --- BMI CALCULATOR ---
@@ -12,12 +14,11 @@ export const BMICalculator: React.FC = () => {
   const bmi = weight / Math.pow(height / 100, 2);
   let category = '';
   let color = '';
-  let width = '0%';
 
-  if (bmi < 18.5) { category = 'Underweight'; color = 'text-blue-500'; width = '25%'; }
-  else if (bmi < 25) { category = 'Normal'; color = 'text-green-500'; width = '50%'; }
-  else if (bmi < 30) { category = 'Overweight'; color = 'text-yellow-500'; width = '75%'; }
-  else { category = 'Obese'; color = 'text-red-500'; width = '100%'; }
+  if (bmi < 18.5) { category = 'Underweight'; color = 'text-blue-500'; }
+  else if (bmi < 25) { category = 'Normal'; color = 'text-green-500'; }
+  else if (bmi < 30) { category = 'Overweight'; color = 'text-yellow-500'; }
+  else { category = 'Obese'; color = 'text-red-500'; }
 
   return (
     <div className="space-y-6">
@@ -101,6 +102,109 @@ export const CalorieCalculator: React.FC = () => {
       </div>
     </div>
   );
+};
+
+// --- MACRO CALCULATOR ---
+export const MacroCalculator: React.FC = () => {
+    const [cals, setCals] = useState(2000);
+    const [goal, setGoal] = useState('maintain'); // lose, maintain, gain
+
+    // Default Ratios
+    let pRatio = 0.3, fRatio = 0.3, cRatio = 0.4;
+    
+    if (goal === 'lose') { pRatio = 0.4; fRatio = 0.3; cRatio = 0.3; }
+    if (goal === 'gain') { pRatio = 0.3; fRatio = 0.2; cRatio = 0.5; }
+
+    const protein = Math.round((cals * pRatio) / 4);
+    const fat = Math.round((cals * fRatio) / 9);
+    const carbs = Math.round((cals * cRatio) / 4);
+
+    const data = [
+        { name: 'Protein', value: protein },
+        { name: 'Fats', value: fat },
+        { name: 'Carbs', value: carbs }
+    ];
+    const COLORS = ['#ef4444', '#eab308', '#3b82f6'];
+
+    return (
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div className="space-y-4">
+                <div>
+                    <label className={labelClass}>Daily Calories</label>
+                    <input type="number" value={cals} onChange={e => setCals(Number(e.target.value))} className={inputClass} />
+                </div>
+                <div>
+                    <label className={labelClass}>Goal</label>
+                    <select value={goal} onChange={e => setGoal(e.target.value)} className={inputClass}>
+                        <option value="lose">Lose Weight (High Protein)</option>
+                        <option value="maintain">Maintain (Balanced)</option>
+                        <option value="gain">Build Muscle (High Carb)</option>
+                    </select>
+                </div>
+                <div className="space-y-2 mt-4">
+                    <div className="flex justify-between p-2 bg-red-50 rounded text-red-700"><span>Protein</span><span>{protein}g</span></div>
+                    <div className="flex justify-between p-2 bg-yellow-50 rounded text-yellow-700"><span>Fats</span><span>{fat}g</span></div>
+                    <div className="flex justify-between p-2 bg-blue-50 rounded text-blue-700"><span>Carbs</span><span>{carbs}g</span></div>
+                </div>
+            </div>
+            <div className="h-64">
+                <ResponsiveContainer width="100%" height="100%">
+                    <PieChart>
+                        <Pie data={data} innerRadius={60} outerRadius={80} paddingAngle={5} dataKey="value">
+                            {data.map((entry, index) => <Cell key={`cell-${index}`} fill={COLORS[index]} />)}
+                        </Pie>
+                        <Tooltip />
+                    </PieChart>
+                </ResponsiveContainer>
+            </div>
+        </div>
+    );
+};
+
+// --- BODY FAT ESTIMATOR (US Navy Method) ---
+export const BodyFatCalculator: React.FC = () => {
+    const [gender, setGender] = useState('male');
+    const [waist, setWaist] = useState(85); // cm
+    const [neck, setNeck] = useState(38); // cm
+    const [height, setHeight] = useState(178); // cm
+    const [hip, setHip] = useState(95); // cm (female only)
+
+    let bf = 0;
+    // Simplified approximation for demo purposes. Real formula uses logs.
+    if (gender === 'male') {
+        bf = 495 / (1.0324 - 0.19077 * Math.log10(waist - neck) + 0.15456 * Math.log10(height)) - 450;
+    } else {
+        bf = 495 / (1.29579 - 0.35004 * Math.log10(waist + hip - neck) + 0.22100 * Math.log10(height)) - 450;
+    }
+
+    if (isNaN(bf)) bf = 0;
+
+    return (
+        <div className="space-y-6">
+             <div className="flex gap-4">
+                <label className="flex items-center gap-2 cursor-pointer">
+                <input type="radio" checked={gender === 'male'} onChange={() => setGender('male')} name="bf_gender" /> Male
+                </label>
+                <label className="flex items-center gap-2 cursor-pointer">
+                <input type="radio" checked={gender === 'female'} onChange={() => setGender('female')} name="bf_gender" /> Female
+                </label>
+            </div>
+
+            <div className="grid grid-cols-2 gap-4">
+                <div><label className={labelClass}>Waist (cm)</label><input type="number" value={waist} onChange={e => setWaist(Number(e.target.value))} className={inputClass} /></div>
+                <div><label className={labelClass}>Neck (cm)</label><input type="number" value={neck} onChange={e => setNeck(Number(e.target.value))} className={inputClass} /></div>
+                <div><label className={labelClass}>Height (cm)</label><input type="number" value={height} onChange={e => setHeight(Number(e.target.value))} className={inputClass} /></div>
+                {gender === 'female' && (
+                    <div><label className={labelClass}>Hip (cm)</label><input type="number" value={hip} onChange={e => setHip(Number(e.target.value))} className={inputClass} /></div>
+                )}
+            </div>
+
+            <div className="text-center p-6 bg-slate-800 rounded-xl text-white">
+                <p className="text-sm opacity-60">Estimated Body Fat</p>
+                <p className="text-4xl font-bold mt-2">{bf.toFixed(1)}%</p>
+            </div>
+        </div>
+    );
 };
 
 // --- AGE CALCULATOR ---

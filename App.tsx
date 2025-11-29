@@ -1,46 +1,63 @@
+
 import React, { useState } from 'react';
 import { 
-  Calculator, 
-  DollarSign, 
-  Percent, 
-  Scale, 
-  TrendingUp, 
-  Activity, 
-  Utensils, 
-  Calendar, 
-  FlaskConical, 
-  MoveHorizontal, 
-  Fuel,
-  Menu,
-  X,
-  Home
+  Calculator, DollarSign, Percent, Scale, TrendingUp, Activity, Utensils, Calendar, 
+  Fuel, Menu, X, Home, Zap, Server, BarChart2, Sigma, Code, GraduationCap, Boxes
 } from 'lucide-react';
 
 import { CalculatorType, CalculatorDef } from './types.ts';
 import { AdSpace } from './components/AdSpace.tsx';
 
 // Calculators
-import { LoanCalculator, CompoundInterestCalculator, CurrencyConverter, TipCalculator, DiscountCalculator } from './components/calculators/FinanceCalculators.tsx';
-import { BMICalculator, CalorieCalculator, AgeCalculator } from './components/calculators/HealthCalculators.tsx';
+import { LoanCalculator, CompoundInterestCalculator, CurrencyConverter, TipCalculator, DiscountCalculator, RetirementCalculator, ROICalculator } from './components/calculators/FinanceCalculators.tsx';
+import { BMICalculator, CalorieCalculator, AgeCalculator, MacroCalculator, BodyFatCalculator } from './components/calculators/HealthCalculators.tsx';
 import { ScientificCalculator, UnitConverter, FuelCalculator } from './components/calculators/ScienceCalculators.tsx';
+import { OhmsLawCalculator, ResistorCalculator } from './components/calculators/EngineeringCalculators.tsx';
+import { EquationSolver, MatrixCalculator, ComplexCalculator } from './components/calculators/MathCalculators.tsx';
+import { DescriptiveStatistics, RegressionCalculator } from './components/calculators/StatisticsCalculators.tsx';
+import { BaseConverter } from './components/calculators/CodingCalculators.tsx';
 
 // --- DATA ---
 const CALCULATORS: CalculatorDef[] = [
-  { id: 'basic', title: 'Scientific Calculator', description: 'Advanced math operations with memory.', icon: <Calculator />, category: 'math' },
-  { id: 'bmi', title: 'BMI Calculator', description: 'Check your Body Mass Index health score.', icon: <Scale />, category: 'health' },
-  { id: 'loan', title: 'Loan Calculator', description: 'Estimate monthly payments and interest.', icon: <DollarSign />, category: 'finance' },
-  { id: 'compound', title: 'Compound Interest', description: 'Visualize investment growth over time.', icon: <TrendingUp />, category: 'finance' },
-  { id: 'currency', title: 'Currency Converter', description: 'Convert between major world currencies.', icon: <DollarSign />, category: 'finance' },
-  { id: 'tip', title: 'Tip Calculator', description: 'Split bills and calculate tips easily.', icon: <Percent />, category: 'everyday' },
-  { id: 'unit', title: 'Unit Converter', description: 'Length, Weight, and Temperature.', icon: <MoveHorizontal />, category: 'math' },
-  { id: 'calorie', title: 'Calorie Calculator', description: 'Calculate daily TDEE and BMR.', icon: <Utensils />, category: 'health' },
-  { id: 'age', title: 'Age Calculator', description: 'Calculate exact age in years, months, days.', icon: <Calendar />, category: 'everyday' },
-  { id: 'discount', title: 'Discount Calculator', description: 'Find the final price after sales.', icon: <Percent />, category: 'everyday' },
-  { id: 'fuel', title: 'Fuel Cost', description: 'Estimate trip costs based on mileage.', icon: <Fuel />, category: 'everyday' },
-  { id: 'gpa', title: 'GPA Calculator', description: 'Calculate Grade Point Average.', icon: <Activity />, category: 'math' }
+  // Math
+  { id: 'basic', title: 'Scientific Calculator', description: 'Advanced operations with memory.', icon: <Calculator />, category: 'math' },
+  { id: 'equation', title: 'Equation Solver', description: 'Solve Linear and Quadratic equations.', icon: <Sigma />, category: 'math' },
+  { id: 'matrix', title: 'Matrix Calculator', description: 'Determinants and basic matrix ops.', icon: <Boxes />, category: 'math' },
+  { id: 'complex', title: 'Complex Numbers', description: 'Operations with imaginary numbers.', icon: <Activity />, category: 'math' },
+
+  // Finance
+  { id: 'loan', title: 'Loan Calculator', description: 'Estimate payments and interest.', icon: <DollarSign />, category: 'finance' },
+  { id: 'compound', title: 'Investment Growth', description: 'Compound interest visualization.', icon: <TrendingUp />, category: 'finance' },
+  { id: 'retirement', title: 'Retirement Planner', description: 'Plan your financial future.', icon: <GraduationCap />, category: 'finance' },
+  { id: 'roi', title: 'ROI Calculator', description: 'Return on Investment analysis.', icon: <Percent />, category: 'finance' },
+  { id: 'currency', title: 'Currency Converter', description: 'Major world currencies.', icon: <DollarSign />, category: 'finance' },
+
+  // Health
+  { id: 'bmi', title: 'BMI Calculator', description: 'Body Mass Index health score.', icon: <Scale />, category: 'health' },
+  { id: 'calorie', title: 'Calorie (TDEE)', description: 'Daily energy needs calculator.', icon: <Utensils />, category: 'health' },
+  { id: 'macro', title: 'Macro Nutrients', description: 'Protein, Carbs, and Fat breakdown.', icon: <Utensils />, category: 'health' },
+  { id: 'bodyfat', title: 'Body Fat %', description: 'US Navy method estimation.', icon: <Scale />, category: 'health' },
+
+  // Engineering
+  { id: 'ohms', title: 'Ohm\'s Law', description: 'Voltage, Current, Resistance relation.', icon: <Zap />, category: 'engineering' },
+  { id: 'resistor', title: 'Resistor Codes', description: '4-band resistor color calculator.', icon: <Zap />, category: 'engineering' },
+  
+  // Statistics
+  { id: 'stats', title: 'Descriptive Stats', description: 'Mean, Median, Mode, SD.', icon: <BarChart2 />, category: 'science' },
+  { id: 'regression', title: 'Regression', description: 'Linear regression with graph.', icon: <TrendingUp />, category: 'science' },
+
+  // Coding & Tools
+  { id: 'base', title: 'Base Converter', description: 'Binary, Hex, Decimal, Octal.', icon: <Code />, category: 'coding' },
+  { id: 'unit', title: 'Unit Converter', description: 'Length, Weight, Temp, and more.', icon: <Server />, category: 'everyday' },
+  
+  // Everyday
+  { id: 'tip', title: 'Tip Calculator', description: 'Split bills easily.', icon: <Percent />, category: 'everyday' },
+  { id: 'age', title: 'Age Calculator', description: 'Exact age in years/months/days.', icon: <Calendar />, category: 'everyday' },
+  { id: 'discount', title: 'Discount Calculator', description: 'Sale price calculator.', icon: <Percent />, category: 'everyday' },
+  { id: 'fuel', title: 'Fuel Cost', description: 'Trip cost estimation.', icon: <Fuel />, category: 'everyday' },
 ];
 
-const CATEGORIES = ['All', 'Finance', 'Health', 'Math', 'Everyday'];
+const CATEGORIES = ['All', 'Math', 'Finance', 'Health', 'Engineering', 'Science', 'Coding', 'Everyday'];
 
 function App() {
   const [activeCalc, setActiveCalc] = useState<CalculatorType | null>(null);
@@ -53,19 +70,42 @@ function App() {
 
   const renderCalculator = () => {
     switch (activeCalc) {
+      // Finance
       case 'loan': return <LoanCalculator />;
       case 'compound': return <CompoundInterestCalculator />;
+      case 'retirement': return <RetirementCalculator />;
+      case 'roi': return <ROICalculator />;
       case 'currency': return <CurrencyConverter />;
       case 'tip': return <TipCalculator />;
       case 'discount': return <DiscountCalculator />;
+      
+      // Health
       case 'bmi': return <BMICalculator />;
       case 'calorie': return <CalorieCalculator />;
+      case 'macro': return <MacroCalculator />;
+      case 'bodyfat': return <BodyFatCalculator />;
       case 'age': return <AgeCalculator />;
+      
+      // Science/Math
       case 'basic': return <ScientificCalculator />;
       case 'scientific': return <ScientificCalculator />;
+      case 'equation': return <EquationSolver />;
+      case 'matrix': return <MatrixCalculator />;
+      case 'complex': return <ComplexCalculator />;
       case 'unit': return <UnitConverter />;
       case 'fuel': return <FuelCalculator />;
-      case 'gpa': return <ScientificCalculator />; // Placeholder for now
+      
+      // Engineering
+      case 'ohms': return <OhmsLawCalculator />;
+      case 'resistor': return <ResistorCalculator />;
+      
+      // Stats
+      case 'stats': return <DescriptiveStatistics />;
+      case 'regression': return <RegressionCalculator />;
+      
+      // Coding
+      case 'base': return <BaseConverter />;
+      
       default: return <ScientificCalculator />;
     }
   };
@@ -73,7 +113,7 @@ function App() {
   const getActiveDef = () => CALCULATORS.find(c => c.id === activeCalc);
 
   return (
-    <div className="min-h-screen flex flex-col md:flex-row bg-slate-50 text-slate-900">
+    <div className="min-h-screen flex flex-col md:flex-row bg-slate-50 text-slate-900 font-sans">
       {/* Sidebar Navigation */}
       <aside className={`fixed inset-y-0 left-0 z-50 w-64 bg-white border-r border-gray-200 transform transition-transform duration-300 ease-in-out md:relative md:translate-x-0 ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'}`}>
         <div className="p-6 flex items-center justify-between">
@@ -111,7 +151,7 @@ function App() {
       </aside>
 
       {/* Main Content */}
-      <main className="flex-1 flex flex-col h-screen overflow-hidden">
+      <main className="flex-1 flex flex-col h-screen overflow-hidden relative">
         {/* Header */}
         <header className="bg-white border-b border-gray-200 px-6 py-4 flex items-center justify-between shrink-0">
           <div className="flex items-center gap-4">
@@ -129,22 +169,22 @@ function App() {
         </header>
 
         {/* Scrollable Content Area */}
-        <div className="flex-1 overflow-y-auto p-6 scroll-smooth">
+        <div className="flex-1 overflow-y-auto p-6 scroll-smooth bg-slate-50">
           
           {!activeCalc ? (
-            <div className="max-w-6xl mx-auto animate-fade-in">
+            <div className="max-w-7xl mx-auto animate-fade-in">
                <div className="mb-8 text-center">
-                 <h2 className="text-3xl font-bold text-gray-900 mb-2">Welcome to CalcHub AI</h2>
-                 <p className="text-gray-500">Select a tool below to get started.</p>
+                 <h2 className="text-4xl font-extrabold text-gray-900 mb-2 tracking-tight">Welcome to CalcHub AI</h2>
+                 <p className="text-gray-500 text-lg">Select a tool below to get started with advanced calculations.</p>
                </div>
 
                {/* Category Filter */}
-               <div className="flex flex-wrap justify-center gap-2 mb-8">
+               <div className="flex flex-wrap justify-center gap-2 mb-10">
                  {CATEGORIES.map(cat => (
                    <button 
                      key={cat}
                      onClick={() => setActiveCategory(cat)}
-                     className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${activeCategory === cat ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-200' : 'bg-white text-gray-600 hover:bg-gray-50 border border-gray-200'}`}
+                     className={`px-5 py-2 rounded-full text-sm font-medium transition-all ${activeCategory === cat ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-200 scale-105' : 'bg-white text-gray-600 hover:bg-gray-50 border border-gray-200'}`}
                    >
                      {cat}
                    </button>
@@ -157,23 +197,26 @@ function App() {
                    <div 
                      key={idx}
                      onClick={() => setActiveCalc(calc.id)}
-                     className="bg-white p-6 rounded-xl border border-gray-100 shadow-sm hover:shadow-md hover:border-indigo-100 hover:-translate-y-1 transition-all cursor-pointer group"
+                     className="bg-white p-6 rounded-xl border border-gray-100 shadow-sm hover:shadow-xl hover:border-indigo-100 hover:-translate-y-1 transition-all cursor-pointer group"
                    >
-                     <div className="w-12 h-12 bg-indigo-50 rounded-lg flex items-center justify-center text-indigo-600 mb-4 group-hover:bg-indigo-600 group-hover:text-white transition-colors">
-                       {calc.icon}
+                     <div className="flex items-start justify-between mb-4">
+                        <div className="w-12 h-12 bg-indigo-50 rounded-lg flex items-center justify-center text-indigo-600 group-hover:bg-indigo-600 group-hover:text-white transition-colors">
+                          {calc.icon}
+                        </div>
+                        <span className="text-[10px] font-bold uppercase tracking-wider text-gray-400 bg-gray-50 px-2 py-1 rounded">{calc.category}</span>
                      </div>
-                     <h3 className="font-bold text-gray-900 mb-1">{calc.title}</h3>
-                     <p className="text-sm text-gray-500">{calc.description}</p>
+                     <h3 className="font-bold text-gray-900 mb-1 text-lg">{calc.title}</h3>
+                     <p className="text-sm text-gray-500 leading-relaxed">{calc.description}</p>
                    </div>
                  ))}
                </div>
                
-               <AdSpace slot="inline" className="mb-8" />
+               <AdSpace slot="inline" className="mb-8 max-w-4xl mx-auto" />
             </div>
           ) : (
-            <div className="max-w-4xl mx-auto animate-fade-in">
-              <div className="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
-                <div className="p-6 border-b border-gray-100 bg-gray-50/50 flex justify-between items-center">
+            <div className="max-w-5xl mx-auto animate-fade-in">
+              <div className="bg-white rounded-2xl shadow-lg border border-gray-200 overflow-hidden">
+                <div className="p-6 border-b border-gray-100 bg-gradient-to-r from-gray-50 to-white flex justify-between items-center">
                    <div>
                       <h2 className="text-xl font-bold text-gray-900 flex items-center gap-2">
                         {getActiveDef()?.icon}
@@ -181,8 +224,9 @@ function App() {
                       </h2>
                       <p className="text-sm text-gray-500 mt-1">{getActiveDef()?.description}</p>
                    </div>
+                   <button onClick={() => setActiveCalc(null)} className="text-sm text-indigo-600 hover:text-indigo-800 font-medium">Back to Home</button>
                 </div>
-                <div className="p-6 md:p-8">
+                <div className="p-6 md:p-10">
                   {renderCalculator()}
                 </div>
               </div>
