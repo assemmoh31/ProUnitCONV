@@ -10,7 +10,8 @@ export type CalculatorType =
   | 'calorie'
   | 'age'
   | 'discount'
-  | 'fuel';
+  | 'fuel'
+  | 'gpa';
 
 export interface CalculatorDef {
   id: CalculatorType;

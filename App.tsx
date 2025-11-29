@@ -37,7 +37,7 @@ const CALCULATORS: CalculatorDef[] = [
   { id: 'age', title: 'Age Calculator', description: 'Calculate exact age in years, months, days.', icon: <Calendar />, category: 'everyday' },
   { id: 'discount', title: 'Discount Calculator', description: 'Find the final price after sales.', icon: <Percent />, category: 'everyday' },
   { id: 'fuel', title: 'Fuel Cost', description: 'Estimate trip costs based on mileage.', icon: <Fuel />, category: 'everyday' },
-  { id: 'basic', title: 'GPA Calculator', description: 'Calculate Grade Point Average.', icon: <Activity />, category: 'math' } // Placeholder pointing to basic for now to hit 12 visual slots
+  { id: 'gpa', title: 'GPA Calculator', description: 'Calculate Grade Point Average.', icon: <Activity />, category: 'math' }
 ];
 
 const CATEGORIES = ['All', 'Finance', 'Health', 'Math', 'Everyday'];
@@ -65,6 +65,7 @@ function App() {
       case 'scientific': return <ScientificCalculator />;
       case 'unit': return <UnitConverter />;
       case 'fuel': return <FuelCalculator />;
+      case 'gpa': return <ScientificCalculator />; // Placeholder for now
       default: return <ScientificCalculator />;
     }
   };
