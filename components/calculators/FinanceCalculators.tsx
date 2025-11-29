@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { PieChart, Pie, Cell, AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
-import { GeminiAssistant } from '../GeminiAssistant';
+import { GeminiAssistant } from '../GeminiAssistant.tsx';
 
 // --- Shared Styles ---
 const inputClass = "w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all";

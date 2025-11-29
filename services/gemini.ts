@@ -1,11 +1,8 @@
 import { GoogleGenAI } from "@google/genai";
 
-const apiKey = process.env.API_KEY || '';
-const ai = new GoogleGenAI({ apiKey });
+const ai = new GoogleGenAI({ apiKey: process.env.API_KEY! });
 
 export const getAIExplanation = async (context: string, result: string): Promise<string> => {
-  if (!apiKey) return "Please configure your API Key to use the AI Assistant.";
-
   try {
     const prompt = `
       You are a helpful mathematical assistant in a calculator app.

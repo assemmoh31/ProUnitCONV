@@ -16,13 +16,13 @@ import {
   Home
 } from 'lucide-react';
 
-import { CalculatorType, CalculatorDef } from './types';
-import { AdSpace } from './components/AdSpace';
+import { CalculatorType, CalculatorDef } from './types.ts';
+import { AdSpace } from './components/AdSpace.tsx';
 
 // Calculators
-import { LoanCalculator, CompoundInterestCalculator, CurrencyConverter, TipCalculator, DiscountCalculator } from './components/calculators/FinanceCalculators';
-import { BMICalculator, CalorieCalculator, AgeCalculator } from './components/calculators/HealthCalculators';
-import { ScientificCalculator, UnitConverter, FuelCalculator } from './components/calculators/ScienceCalculators';
+import { LoanCalculator, CompoundInterestCalculator, CurrencyConverter, TipCalculator, DiscountCalculator } from './components/calculators/FinanceCalculators.tsx';
+import { BMICalculator, CalorieCalculator, AgeCalculator } from './components/calculators/HealthCalculators.tsx';
+import { ScientificCalculator, UnitConverter, FuelCalculator } from './components/calculators/ScienceCalculators.tsx';
 
 // --- DATA ---
 const CALCULATORS: CalculatorDef[] = [

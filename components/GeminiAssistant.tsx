@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Sparkles, X, MessageSquare } from 'lucide-react';
-import { getAIExplanation } from '../services/gemini';
+import { getAIExplanation } from '../services/gemini.ts';
 
 interface GeminiAssistantProps {
   context: string;

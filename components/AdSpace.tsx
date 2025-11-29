@@ -1,5 +1,5 @@
 import React from 'react';
-import { AdProps } from '../types';
+import { AdProps } from '../types.ts';
 
 export const AdSpace: React.FC<AdProps> = ({ slot, className = '' }) => {
   const getSize = () => {

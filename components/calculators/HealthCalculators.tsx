@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { GeminiAssistant } from '../GeminiAssistant';
+import { GeminiAssistant } from '../GeminiAssistant.tsx';
 
 const inputClass = "w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-pink-500 focus:border-transparent outline-none transition-all";
 const labelClass = "block text-sm font-medium text-gray-700 mb-1";
